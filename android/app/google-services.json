@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1093952210876",
+    "firebase_url": "https://aamal-23ae3.firebaseio.com",
+    "project_id": "aamal-23ae3",
+    "storage_bucket": "aamal-23ae3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1093952210876:android:aeedb0c72f997829d5cdb9",
+        "android_client_info": {
+          "package_name": "akhattab595.workerapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1093952210876-9i3tp7g7edi2k3l7dsqbtjt9idjnd6pt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "akhattab595.workerapp",
+            "certificate_hash": "c550cb62c8409154e215977bbb5777b4450461fb"
+          }
+        },
+        {
+          "client_id": "1093952210876-7fo5fktfgtuld2g928gpliup4r5fmbec.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWUTldRMDj_rAQKJZDuVt_Ia5Ouv4J0PA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1093952210876-7fo5fktfgtuld2g928gpliup4r5fmbec.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
