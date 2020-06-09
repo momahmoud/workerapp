@@ -5,13 +5,16 @@ import 'package:workerapp/models/user_model.dart';
 import 'package:workerapp/utils/constant.dart';
 
 class DatabaseService {
-  // static void updateUser(UserModel user) {
-  //   usersRef.document(user.id).updateData({
-  //     'name': user.name,
-  //     'profileImageUrl': user.profileImageUrl,
-  //     'bio': user.bio,
-  //   });
-  // }
+  static void updateUser(UserModel user) {
+    postsRef.document(user.id).updateData({
+      'imageUrl': user.imageUrl,
+      'name': user.name,
+      'skills': user.skills,
+      'phone': user.phone,
+      'address': user.address,
+      'age': user.age
+    });
+  }
 
   // static Future<QuerySnapshot> searchUsers(String name) {
   //   Future<QuerySnapshot> users =
@@ -20,7 +23,7 @@ class DatabaseService {
   // }
 
   static void createPost(UserModel user) {
-    postsRef.document(user.id).collection('users').add({
+    postsRef.document(user.id).collection('userPost').add({
       'imageUrl': user.imageUrl,
       'name': user.name,
       'skills': user.skills,

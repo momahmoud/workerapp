@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:workerapp/login&&Singup/Widget/bezierContainer.dart';
+import 'package:workerapp/home/Home.dart';
+import 'package:workerapp/login_Singup/Widget/bezierContainer.dart';
 import 'package:workerapp/models/user_model.dart';
 import 'package:workerapp/services/database_service.dart';
 import 'package:workerapp/services/storage_service.dart';
@@ -248,7 +249,10 @@ class _AddDataState extends State<AddData> {
   Widget _backButton() {
     return InkWell(
       onTap: () {
-        Navigator.pop(context);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => new Home()));
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10),
@@ -258,7 +262,7 @@ class _AddDataState extends State<AddData> {
               padding: EdgeInsets.only(left: 0, top: 10, bottom: 10),
               child: Icon(Icons.keyboard_arrow_right, color: Colors.black),
             ),
-            Text('عوده',
+            Text('تخطي',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500))
           ],
         ),
@@ -382,7 +386,7 @@ class _AddDataState extends State<AddData> {
                           ? Icon(
                               Icons.add_a_photo,
                               color: Colors.white,
-                              size: 130,
+                              size: 100,
                             )
                           : Image(
                               image: FileImage(

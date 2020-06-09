@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:workerapp/services/auth_service.dart';
+import 'package:provider/provider.dart';
+import 'package:workerapp/services/auth.dart';
+// import 'package:workerapp/services/auth_service.dart';
 import 'signup.dart';
+import '../login_Singup/Widget/home_icon.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'Widget/bezierContainer.dart';
@@ -17,7 +22,71 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   String _email, _password;
+  Map<String, String> _authData = {
+    'email': '',
+    'password': '',
+  };
+  var _isLoading = false;
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+            title: Text('An Error Occurred!'),
+            content: Text(message),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Okay'),
+                onPressed: () {
+                  Navigator.of(ctx).pop();
+                },
+              )
+            ],
+          ),
+    );
+  }
 
+  Future<void> _submit() async {
+    if (!_formKey.currentState.validate()) {
+      // Invalid!
+      return;
+    }
+    _formKey.currentState.save();
+    setState(() {
+      _isLoading = true;
+    });
+    try {    
+        // Log user in
+        await Provider.of<Auth>(context, listen: false).login(
+          _authData['email'],
+          _authData['password'],
+        ); 
+        Navigator.push(context, MaterialPageRoute(builder: (context) => MainScreen()));
+    } on HttpException catch (error) {
+      
+      var errorMessage = 'Authentication failed';
+      if (error.toString().contains('EMAIL_EXISTS')) {
+        errorMessage = 'This email address is already in use.';
+      } else if (error.toString().contains('INVALID_EMAIL')) {
+        errorMessage = 'This is not a valid email address';
+      } else if (error.toString().contains('WEAK_PASSWORD')) {
+        errorMessage = 'This password is too weak.';
+      } else if (error.toString().contains('EMAIL_NOT_FOUND')) {
+        errorMessage = 'Could not find a user with that email.';
+      } else if (error.toString().contains('INVALID_PASSWORD')) {
+        errorMessage = 'Invalid password.';
+      }
+      _showErrorDialog(errorMessage);
+    } catch (error) {
+      print(error);
+      const errorMessage =
+          'Could not authenticate you. Please try again later.';
+      _showErrorDialog(errorMessage);
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
   Widget _backButton() {
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -60,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             Directionality(
               textDirection: TextDirection.ltr,
-                          child: TextFormField(
+              child: TextFormField(
                   validator: title == 'الايميل'
                       ? (input) =>
                           !input.contains('@') ? 'يجب ان يحتوي علي @' : null
@@ -69,9 +138,9 @@ class _LoginPageState extends State<LoginPage> {
                               ? 'يجب ان يكون اكبر من 6 حروف'
                               : null
                           : null,
-                  onSaved: (input) =>
-                      title == 'الايميل' ? _email = input.trim() 
-                      : title == 'الرقم السري' ? _password = input : null,
+                  onSaved: (input) => title == 'الايميل'
+                      ? _authData['email'] = input.trim()
+                      : title == 'الرقم السري' ? _authData['password'] = input : null,
                   obscureText: isPassword,
                   decoration: InputDecoration(
                       border: InputBorder.none,
@@ -84,15 +153,15 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _submit() {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-      AuthService.signinUser(_email.trim(), _password.trim());
-    }
-  }
+  // void _submit() {
+  //   if (_formKey.currentState.validate()) {
+  //     _formKey.currentState.save();
+  //     AuthService.signinUser(_email.trim(), _password.trim());
+  //   }
+  // }
 
   Widget _submitButton() {
-    return Directionality(
+    return _isLoading ? CircularProgressIndicator() : Directionality(
       textDirection: TextDirection.rtl,
       child: InkWell(
         onTap: _submit,

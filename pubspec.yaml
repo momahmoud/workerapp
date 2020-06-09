@@ -28,12 +28,14 @@ dependencies:
   firebase_core: any
   firebase_auth: any
   firebase_analytics: any
-  cloud_firestore: any
+  cloud_firestore: ^0.13.3
   provider:
+  flutter_phone_direct_caller:
   firebase_storage:
   image_cropper: ^1.2.1
   uuid: any
   flutter_image_compress: any
+  shared_preferences: any
   image_picker: any
   cached_network_image: any
 
@@ -57,6 +59,9 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - images/ahmed.jpg
+    - images/SP5.jpg
+    - images/sp2.png
+    - images/sp3.png
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

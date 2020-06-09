@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:workerapp/services/auth.dart';
 import 'package:workerapp/services/auth_service.dart';
 import 'Widget/bezierContainer.dart';
 import 'loginPage.dart';
@@ -15,14 +19,77 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
-  String _name, _email, _password;
+  
+  Map<String, String> _authData = {
+    'name':'',
+    'email': '',
+    'password': '',
+  };
+  var _isLoading = false;
+  final _passwordController = TextEditingController();
 
-  void _submit() {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-      AuthService.signupUser(context, _name, _email, _password);
-    }
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+            title: Text('An Error Occurred!'),
+            content: Text(message),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Okay'),
+                onPressed: () {
+                  Navigator.of(ctx).pop();
+                },
+              )
+            ],
+          ),
+    );
   }
+
+  Future<void> _submit() async {
+    if (!_formKey.currentState.validate()) {
+      // Invalid!
+      return;
+    }
+    _formKey.currentState.save();
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+
+        
+        // Sign user up
+        await Provider.of<Auth>(context, listen: false).signup(
+          _authData['email'],
+          _authData['password'],
+        );
+      
+    } on HttpException catch (error) {
+      var errorMessage = 'Authentication failed';
+      if (error.toString().contains('EMAIL_EXISTS')) {
+        errorMessage = 'This email address is already in use.';
+      } else if (error.toString().contains('INVALID_EMAIL')) {
+        errorMessage = 'This is not a valid email address';
+      } else if (error.toString().contains('WEAK_PASSWORD')) {
+        errorMessage = 'This password is too weak.';
+      } else if (error.toString().contains('EMAIL_NOT_FOUND')) {
+        errorMessage = 'Could not find a user with that email.';
+      } else if (error.toString().contains('INVALID_PASSWORD')) {
+        errorMessage = 'Invalid password.';
+      }
+      _showErrorDialog(errorMessage);
+    } catch (error) {
+      print(error);
+      const errorMessage =
+          'Could not authenticate you. Please try again later.';
+      _showErrorDialog(errorMessage);
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
+ 
 
   Widget _backButton() {
     return InkWell(
@@ -59,6 +126,7 @@ class _SignUpPageState extends State<SignUpPage> {
             height: 10,
           ),
           TextFormField(
+            controller: isPassword? _passwordController : null,
               validator: title == 'الايميل'
                   ? (input) =>
                       !input.contains('@') ? 'يجب ان يحتوي علي @' : null
@@ -71,11 +139,11 @@ class _SignUpPageState extends State<SignUpPage> {
                               : null
                           : null,
               onSaved: (input) => title == 'الايميل'
-                  ? _email = input
+                  ? _authData['email'] = input
                   : title == 'الاسم' 
-                  ? _name = input :
+                  ? _authData['name'] = input :
                   title == 'الرقم السري' ?
-                   _password = input : null,
+                   _authData['password'] = input : null,
               obscureText: isPassword,
               decoration: InputDecoration(
                   border: InputBorder.none,
@@ -87,9 +155,9 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget _submitButton() {
-    return InkWell(
+    return _isLoading ? CircularProgressIndicator() :  InkWell(
       onTap: _submit,
-          child: Container(
+          child:  Container(
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.symmetric(vertical: 15),
         alignment: Alignment.center,

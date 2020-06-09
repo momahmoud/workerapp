@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/widgets.dart';
 
-class UserModel{
+class UserModel extends ChangeNotifier{
   final String id;
   final String name;
   final String phone;
@@ -23,7 +24,7 @@ class UserModel{
   factory UserModel.fromDoc(DocumentSnapshot doc){
     return UserModel(
       id: doc.documentID,
-      imageUrl: doc['imageUrl'],
+       imageUrl: doc['imageUrl'],
       name: doc['name'],
       phone: doc['phone'],
       skills: doc['skills'],

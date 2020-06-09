@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-
+import 'package:workerapp/services/auth.dart';
+import '../login_Singup/Widget/bezierContainer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:workerapp/SEARCH/search.dart';
-import 'package:workerapp/login&&Singup/Widget/bezierContainer.dart';
-import 'package:workerapp/login&&Singup/Widget/home_icon.dart';
-import 'package:workerapp/login&&Singup/Widget/home_post.dart';
 import 'package:workerapp/services/auth_service.dart';
-
+import '../login_Singup/Widget/home_post.dart';
 class Home extends StatefulWidget {
   Home({Key key, this.title}) : super(key: key);
 
@@ -17,6 +15,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomePageState extends State<Home> {
+  Auth auth;
   Widget _title() {
     return RichText(
       textAlign: TextAlign.center,
@@ -51,7 +50,7 @@ class _HomePageState extends State<Home> {
         children: <Widget>[
           Align(
             alignment: Alignment.topLeft,
-            child: IconButton(icon: Icon(Icons.exit_to_app), onPressed: () => AuthService.logout()),
+            child: IconButton(icon: Icon(Icons.exit_to_app), onPressed: () => auth.logout()),
           ),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 30),

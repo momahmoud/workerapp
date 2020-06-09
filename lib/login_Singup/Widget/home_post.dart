@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:provider/provider.dart';
+
+import '../../models/user_model.dart';
 
 class Post_worker extends StatefulWidget {
   @override
@@ -7,10 +10,12 @@ class Post_worker extends StatefulWidget {
 }
 
 class _Post_workerState extends State<Post_worker> {
+
   @override
   Widget build(BuildContext context) {
+
     return ListView.builder(
-      itemCount: 20,
+       itemCount: 10,
       shrinkWrap: true,
       itemBuilder: (BuildContext context, int index) => Container(
         width: MediaQuery.of(context).size.width,
@@ -37,7 +42,7 @@ class _Post_workerState extends State<Post_worker> {
                       child: CircleAvatar(
                         backgroundColor: Colors.white,
                         foregroundColor: Colors.white,
-                        backgroundImage: AssetImage('images/ahmed.jpg'),
+                        backgroundImage: AssetImage("images/ahmed.jpg"),
                       ),
                     ),
                     SizedBox(
@@ -47,14 +52,14 @@ class _Post_workerState extends State<Post_worker> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          "رضوان البرنس ",
+                       "احمد خطاب",
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 20),
                         ),
                         Text(
-                          " ميكانيكي سيارات متخصص في الدوكو",
+                        "مبرمج مصري",
                           style: TextStyle(color: Colors.white, fontSize: 13),
                         ),
                         Container(
@@ -67,7 +72,7 @@ class _Post_workerState extends State<Post_worker> {
                               onPressed: () {},
                               color: Colors.white,
                               child: Text(
-                                'المزيد....',
+                                'المزيد.....',
                                 style: TextStyle(color: Colors.blue,    fontWeight: FontWeight.bold,),
                               )),
                         )

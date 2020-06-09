@@ -1,31 +1,54 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:workerapp/Maseege/Maseege_page.dart';
-
+import 'package:workerapp/addDataAndSkills/addData.dart';
+import 'package:workerapp/models/user_model.dart';
 
 import 'package:workerapp/home/Home.dart';
 import 'package:workerapp/profil/ProfilePage.dart';
+import 'package:workerapp/utils/constant.dart';
 class MainScreen extends StatefulWidget {
   @override
   _MainScreenState createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
+  UserModel currentUser;
   Home  homePage;
   Mseege   mseege;
-
+  AddData  addData;
   ProfilePage profilePage;
   List<Widget> pages;
   Widget curentPages ;
   int CruntTapIndex =0;
+  bool isLoading =false;
+   getProfilePosts() async {
+    setState(() {
+      isLoading = true;
+    });
+    QuerySnapshot snapshot = await postsRef
+        .document(currentUser.id)
+        .collection('userPost')
+        .orderBy(
+          'timestamp',
+          descending: true,
+        )
+        .getDocuments();
+      setState((){
+        isLoading = false;
+      });
+  }
+
   @override
   void initState() {
-    // TODO: implement initState
+    getProfilePosts();
     super.initState();
     homePage=Home();
     mseege=Mseege();
 
-    profilePage=ProfilePage();
-    pages=[homePage,mseege,profilePage];
+    profilePage=ProfilePage(userId: currentUser?.id,);
+    addData=AddData();
+    pages=[homePage,mseege,profilePage,addData];
     curentPages=homePage;
   }
   @override
@@ -55,6 +78,10 @@ class _MainScreenState extends State<MainScreen> {
             BottomNavigationBarItem(
                 icon: Icon(Icons.person) ,
                 title: Text("الشخصيه")
+            ),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.add) ,
+                title: Text("اضافة عامل")
             ),
           ],
         ),
